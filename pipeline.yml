@@ -1,0 +1,43 @@
+jobs:
+- name: build-cf-sb-resource-image
+  public: false
+  plan:
+  - aggregate:
+    - get: buildroot-base-image
+      params: {save: true}
+    - get: cf-sb-resource
+      trigger: true
+    - get: cf-cli
+  - task: resource-unit
+    file: cf-sb-resource/build.yml
+  - put: cf-sb-resource-image
+    params:
+      load_base: buildroot-base-image
+      build: built-resource
+
+resources:
+- name: cf-sb-resource
+  type: git
+  source:
+    uri: https://github.com/idahobean/cf-sb-resource.git
+    branch: master
+
+- name: cf-sb-resource-image
+  type: docker-image
+  source:
+    username: {{docker-username}}
+    email: {{docker-email}}
+    password: {{docker-password}}
+    repository: idahobean/cf-sb-resource
+
+- name: cf-cli
+  type: s3
+  source:
+    bucket: go-cli
+    regexp: releases/v([\d\.]+)/cf-cli_.*_linux_x86-64.tgz
+
+- name: buildroot-base-image
+  type: docker-image
+  source:
+    repository: concourse/buildroot
+    tag: base
