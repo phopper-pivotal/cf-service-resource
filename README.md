@@ -1,8 +1,10 @@
-# Cloud Foundry Docker Image Resource
+# [WIP] Cloud Foundry Service Broker Resource
 
-An output only resource that will push Docker Image to a
-Cloud Foundry deployment.  
-based on [concourse/cf-resource](https://github.com/concourse/cf-resource)
+An output only resource that will create/bind to a
+Cloud Foundry Application.  
+based on  
+* [concourse/cf-resource](https://github.com/concourse/cf-resource)  
+* [idahobean/cf-docker-resource](https://github.com/idahobean/cf-docker-resource)
 
 ## Source Configuration
 
@@ -17,18 +19,20 @@ based on [concourse/cf-resource](https://github.com/concourse/cf-resource)
 
 ## Behaviour
 
-### `out`: Deploy Docker Image to a Cloud Foundry
+### `out`: Create and Bind Service to a Cloud Foundry Application
 
-Pushes Docker Image to the Cloud Foundry. 
+1. Create and Bind service to the Cloud Foundry deployed application.
+2. Restage Application
 
 #### Parameters
 
-* `repository`: *Required.* A path to Docker Image.
-* `current_app_name`: *Required.* The name of the application.
-* `memory`: *Optional.* Memory limit. (e.g. 256M, 1024M, 1G)
-* `disk`: *Optional.* Disk limit. (e.g. 256M, 1024M, 1G)
-* `health_check`: *Optional.* `port/none` Default `port`.
-* `delete_app`: *Optional.* Default `false`. (not yet implemented)
+* `service`: *Required.* Service name.
+* `plan`: *Required.* Plan name of the service. 
+* `instance_name`: *Required.* Service instance name.
+* `manifest`: *(Either) Required.* Path to a application manifest file.
+* `current_app_name`: *(Either) Required.* The name of the application to bind service.
+When both are listed, `manifest` is used.
+* `delete`: *Optional.* Default `false`. (not yet implemented)
 
 ## Pipeline example
 
@@ -41,7 +45,22 @@ resource_types:
       repository: idahobean/cf-sb-resource
 
 resources:
+  - name: resource-web-app
+    type: git
+    source:
+      uri: https://github.com/idahobean/cf-service-bind-test.git
+
   - name: foobar-cf
+    type: cf
+    source:
+      api: https://api.foo.bar.cfapps.io
+      username: USERNAME
+      password: PASSWORD
+      organization: ORG
+      space: SPACE
+      skip_cert_check: false
+
+  - name: foobar-cf-sb
     type: cf-sb-resource
     source:
       api: https://api.foo.bar.cfapps.io
@@ -52,16 +71,20 @@ resources:
       skip_cert_check: false
 
 jobs:
-- name: job-deploy-docker-image
+- name: job-deploy-app
   public: true
   serial: true
   plan:
+  - get: resource-web-app
+    task: build
+    file: resource-web-app/build.yml
   - put: foobar-cf
     params:
-      repository: cloudfoundry/lattice-app
-      current_app_name: lattice-foobar
-      memory: 256M
-      disk: 256M
-      health_check: none
+      manifest: build-output/manifest.yml
+    on_success:
+      put: foobar-cf-sb
+      manifest: build-output/manifest.yml
+      service: p-mysql
+      plan: 512mb  
 
 ```
