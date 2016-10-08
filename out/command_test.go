@@ -32,7 +32,9 @@ var _ = Describe("Out Command", func() {
 				Space:        "volcano-base",
 			},
 			Params: out.Params{
-				Repository: "idahobean/dummy:latest",
+				Service: "p-mysql",
+				Plan: "512mb",
+				InstanceName: "mysql-test",
 				CurrentAppName: "foobar",
 			},
 		}
@@ -73,16 +75,29 @@ var _ = Describe("Out Command", func() {
 			Ω(org).Should(Equal("secret"))
 			Ω(space).Should(Equal("volcano-base"))
 
-			By("pushing the app")
-			Ω(cloudFoundry.PushAppCallCount()).Should(Equal(1))
+			By("create service instance")
+			Ω(cloudFoundry.CreateServiceCallCount()).Should(Equal(1))
 
-			repository, currentAppName, memory, disk, healthCheck := cloudFoundry.PushAppArgsForCall(0)
+			service, plan, instanceName := cloudFoundry.CreateServiceArgsForCall(0)
 
-			Ω(repository).Should(Equal("idahobean/dummy:latest"))
-			Ω(currentAppName).Should(Equal("foobar"))
-			Ω(memory).Should(Equal(""))
-			Ω(disk).Should(Equal(""))
-			Ω(healthCheck).Should(Equal(""))
+			Ω(service).Should(Equal("p-mysql"))
+			Ω(plan).Should(Equal("512mb"))
+			Ω(instanceName).Sould(Equal("mysql-test"))
+
+			By("bind service instance to app")
+			Ω(cloudFoundry.BindServiceCallCound()).Should(Equal(1))
+
+			currentAppName, instanceName := cloudFoundry.BindServiceArgsForCall(0)
+
+			Ω(currentAppName).Sould(Equal("foobar"))
+			Ω(instanceName).Sould(Equal("myql-test"))
+
+			By("restage app")
+			Ω(cloudFoundry.RestageAppCallCount()).Sould(Equal(1))
+
+			currentAppName = cloudFoundry.RestageAppArgsForCall(0)
+
+			Ω(currentAppName).Sould(Equal("foobar"))
 
 		})
 
@@ -107,8 +122,22 @@ var _ = Describe("Out Command", func() {
 				Ω(err).Should(MatchError(expectedError))
 			})
 
-			It("from pushing the application", func() {
-				cloudFoundry.PushAppReturns(expectedError)
+			It("from create service instance", func() {
+				cloudFoundry.CreateServiceReturns(expectedError)
+
+				_, err := command.Run(request)
+				Ω(err).Sould(MatchError(expectedError))
+			})
+
+			It("from ginding service to app", func() {
+				cloudFoundry.BindServiceReturns(expectedError)
+
+				_, err := command.Run(request)
+				Ω(err).Sould(MatchError(expectedError)
+			})
+
+			It("from restage app", func() {
+				cloudFoundry.RestageAppReturns(expectedError)
 
 				_, err := command.Run(request)
 				Ω(err).Should(MatchError(expectedError))
@@ -126,8 +155,10 @@ var _ = Describe("Out Command", func() {
 					SkipCertCheck: true,
 				},
 				Params: out.Params{
-					Repository: "idahobean/dummy",
-					CurrentAppName: "fooobaaar",
+					Service:        "foo",
+					Plan:           "bar",
+					InstanceName:   "baz",
+					CurrentAppName: "fox",
 				},
 			}
 
@@ -139,38 +170,6 @@ var _ = Describe("Out Command", func() {
 
 			_, _, _, insecure := cloudFoundry.LoginArgsForCall(0)
 			Ω(insecure).Should(Equal(true))
-		})
-
-		It("deploy with fulfilled options", func() {
-			request = out.Request{
-				Source: resource.Source{
-					API:          "https://api.foobar.cfapps.io",
-					Username:     "foo@bar.baz",
-					Password:     "foobarbaz",
-					Organization: "orgg",
-					Space:        "spacee",
-				},
-				Params: out.Params{
-					Repository:     "idahobean/foo",
-					CurrentAppName: "bar",
-					Memory:         "64M",
-					Disk:           "128M",
-					HealthCheck:    "none",
-				},
-			}
-
-			_, err := command.Run(request)
-			Ω(err).ShouldNot(HaveOccurred())
-
-			By("pushing the app")
-			Ω(cloudFoundry.PushAppCallCount()).Should(Equal(1))
-
-			repository, currentAppName, memory, disk, healthCheck := cloudFoundry.PushAppArgsForCall(0)
-			Ω(repository).Should(Equal("idahobean/foo"))
-			Ω(currentAppName).Should(Equal("bar"))
-			Ω(memory).Should(Equal("64M"))
-			Ω(disk).Should(Equal("128M"))
-			Ω(healthCheck).Should(Equal("none"))
 		})
 	})
 })
