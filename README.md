@@ -60,7 +60,7 @@ resources:
       space: SPACE
       skip_cert_check: false
 
-  - name: foobar-cf-sb
+  - name: foobar-cf-service
     type: cf-service-resource
     source:
       api: https://api.foo.bar.cfapps.io
@@ -82,7 +82,7 @@ jobs:
     params:
       manifest: build-output/manifest.yml
     on_success:
-      put: foobar-cf-sb
+      put: foobar-cf-service
       manifest: build-output/manifest.yml
       service: p-mysql
       plan: 512mb  
