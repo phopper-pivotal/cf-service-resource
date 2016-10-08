@@ -27,16 +27,31 @@ type FakePAAS struct {
 	targetReturns struct {
 		result1 error
 	}
-	PushAppStub        func(repository string, currentAppName string, memory string, disk string, healthCheck string) error
-	pushAppMutex       sync.RWMutex
-	pushAppArgsForCall []struct {
-		repository     string
-		currentAppName string
-		memory         string
-		disk           string
-		healthCheck    string
+	CreateServiceStub  func(service string, plan string, instanceName string) error
+	createServiceMutex sync.RWMutex
+	createServiceArgsForCall []struct {
+		service      string
+		plan         string
+		instanceName string
 	}
-	pushAppReturns struct {
+	createServiceReturns struct {
+		result1 error
+	}
+	BindServiceStub  func(currentAppName string, instanceName string) error
+	bindServiceMutex sync.RWMutex
+	bindServiceArgsForCall []struct {
+		currentAppName string
+		instanceName   string
+	}
+	bindServiceReturns struct {
+		result1 error
+	}
+	RestageAppStub  func(currentAppName string) error
+	restageAppMutex sync.RWMutex
+	restageAppArgsForCall []struct {
+		currentAppName string
+	}
+	restageAppReturn struct {
 		result1 error
 	}
 }
@@ -109,38 +124,101 @@ func (fake *FakePAAS) TargetReturns(result1 error) {
 	}{result1}
 }
 
-func (fake *FakePAAS) PushApp(repository string, currentAppName string, memory string, disk string, healthCheck string) error {
-	fake.pushAppMutex.Lock()
-	fake.pushAppArgsForCall = append(fake.pushAppArgsForCall, struct {
-		repository     string
-		currentAppName string
-		memory         string
-		disk           string
-		healthCheck    string
-	}{repository, currentAppName, memory, disk, healthCheck})
-	fake.pushAppMutex.Unlock()
-	if fake.PushAppStub != nil {
-		return fake.PushAppStub(repository, currentAppName, memory, disk, healthCheck)
+func (fake *FakePAAS) CreateService(service string, plan string, instanceName string) error {
+	fake.createServiceMutex.Lock()
+	fake.createServiceArgsForCall = append(fake.createServiceArgsForCall, struct {
+		service      string
+		plan         string
+		instanceName string
+	}{service, plan, instanceName})
+	fake.createServiceMutex.Unlock()
+	if fake.CreateServiceStub != nil {
+		return fake.CreateServiceStub(service, plan, instanceName)
 	} else {
-		return fake.pushAppReturns.result1
+		return fake.createServiceReturns.result1
 	}
 }
 
-func (fake *FakePAAS) PushAppCallCount() int {
-	fake.pushAppMutex.RLock()
-	defer fake.pushAppMutex.RUnlock()
-	return len(fake.pushAppArgsForCall)
+func (fake *FakePAAS) CreateServiceCallCount() int {
+	fake.createServiceMutex.RLock()
+	defer fake.createServiceMutex.RUnlock()
+	return len(fake.createServiceArgsForCall)
 }
 
-func (fake *FakePAAS) PushAppArgsForCall(i int) (string, string, string, string, string) {
-	fake.pushAppMutex.RLock()
-	defer fake.pushAppMutex.RUnlock()
-	return fake.pushAppArgsForCall[i].repository, fake.pushAppArgsForCall[i].currentAppName, fake.pushAppArgsForCall[i].memory, fake.pushAppArgsForCall[i].disk, fake.pushAppArgsForCall[i].healthCheck
+func (fake *FakePAAS) CreateServiceArgsForCall(i int) (string, string, string) {
+	fake.createServiceMutex.RLock()
+	defer fake.createServiceMutex.RUnlock()
+	return fake.createServiceArgsForCall[i].service, fake.createServiceArgsForCall[i].plan, fake.createServiceArgsForCall[i].instanceName
 }
 
-func (fake *FakePAAS) PushAppReturns(result1 error) {
-	fake.PushAppStub = nil
-	fake.pushAppReturns = struct {
+func (fake *FakePAAS) CreateServiceReturns(result1 error) {
+	fake.CreateServiceStub = nil
+	fake.createServiceReturns = struct {
+		result1 error
+	}{result1}
+}
+
+func (fake *FakePAAS) BindService(currentAppName string, instanceName string) error {
+	fake.bindServiceMutex.Lock()
+	fake.bindServiceArgsForCall = append(fake.bindServiceArgsForCall, struct {
+		currentAppName string
+		instanceName   string
+	}{currentAppName, instanceName})
+	fake.bindServiceMutex.Unlock()
+	if fake.BindServiceStub != nil {
+		return fake.BindServiceStub(currentAppName, instanceName)
+	} else {
+		return fake.bindServiceReturns.result1
+	}
+}
+
+func (fake *FakePAAS) BindServiceCallCount() int {
+	fake.bindServiceMutex.RLock()
+	defer fake.bindServiceMutex.RUnlock()
+	return len(fake.bindServiceArgsForCall)
+}
+
+func (fake *FakePAAS) BindServiceArgsForCall(i int) (string, string) {
+	fake.bindServiceMutex.RLock()
+	defer fake.bindServiceMutex.RUnlock()
+	return fake.bindServiceArgsForCall[i].currentAppName, fake.bindServiceArgsForCall[i].instanceName
+}
+
+func (fake *FakePAAS) BindServiceReturns(result1 error) {
+	fake.BindServiceStub = nil
+	fake.bindServiceReturns = struct {
+		result1 error
+	}{result1}
+}
+
+func (fake *FakePAAS) RestageApp(currentAppName string) error {
+	fake.restageAppMutex.Lock()
+	fake.restageAppArgsForCall = append(fake.restageAppArgsForCall, struct {
+		currentAppName string
+	}{currentAppName})
+	fake.restageAppMutex.Unlock()
+	if fake.RestageAppStuc != nil {
+		return fake.RestageAppStub(currentAppName)
+	} else {
+		return fake.restageAppReturns.result1
+	}
+}
+
+func (fake *FakePAAS) RestageAppCallCount() int {
+	fake.restageAppMutex.RLock()
+	defer fake.restageAppMutex.RUnlock()
+	return len(fake.restageAppArgsForCall)
+}
+
+func (fake *FakePAAS) RestageAppArgsForCall(i int) (string) {
+	fake.restageAppMutex.RLock()
+	defer fake.restageAppMutex.RUnlock()
+	return fake.restageAppArgsForCall[i].currentAppName
+}
+
+func (fake *FakePAAS) RestageAppReturns(result1 error) {
+	fake.RestageAppStub = nil
+	fake.restageAppReturns = struct {
 		result1 error
 	}{result1}
 }
