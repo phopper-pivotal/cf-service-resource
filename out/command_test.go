@@ -82,22 +82,22 @@ var _ = Describe("Out Command", func() {
 
 			Ω(service).Should(Equal("p-mysql"))
 			Ω(plan).Should(Equal("512mb"))
-			Ω(instanceName).Sould(Equal("mysql-test"))
+			Ω(instanceName).Should(Equal("mysql-test"))
 
 			By("bind service instance to app")
-			Ω(cloudFoundry.BindServiceCallCound()).Should(Equal(1))
+			Ω(cloudFoundry.BindServiceCallCount()).Should(Equal(1))
 
 			currentAppName, instanceName := cloudFoundry.BindServiceArgsForCall(0)
 
-			Ω(currentAppName).Sould(Equal("foobar"))
-			Ω(instanceName).Sould(Equal("myql-test"))
+			Ω(currentAppName).Should(Equal("foobar"))
+			Ω(instanceName).Should(Equal("myql-test"))
 
 			By("restage app")
-			Ω(cloudFoundry.RestageAppCallCount()).Sould(Equal(1))
+			Ω(cloudFoundry.RestageAppCallCount()).Should(Equal(1))
 
 			currentAppName = cloudFoundry.RestageAppArgsForCall(0)
 
-			Ω(currentAppName).Sould(Equal("foobar"))
+			Ω(currentAppName).Should(Equal("foobar"))
 
 		})
 
@@ -126,14 +126,14 @@ var _ = Describe("Out Command", func() {
 				cloudFoundry.CreateServiceReturns(expectedError)
 
 				_, err := command.Run(request)
-				Ω(err).Sould(MatchError(expectedError))
+				Ω(err).Should(MatchError(expectedError))
 			})
 
-			It("from ginding service to app", func() {
+			It("from binding service to app", func() {
 				cloudFoundry.BindServiceReturns(expectedError)
 
 				_, err := command.Run(request)
-				Ω(err).Sould(MatchError(expectedError)
+				Ω(err).Should(MatchError(expectedError))
 			})
 
 			It("from restage app", func() {

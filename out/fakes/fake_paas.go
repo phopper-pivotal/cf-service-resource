@@ -51,7 +51,7 @@ type FakePAAS struct {
 	restageAppArgsForCall []struct {
 		currentAppName string
 	}
-	restageAppReturn struct {
+	restageAppReturns struct {
 		result1 error
 	}
 }
@@ -197,7 +197,7 @@ func (fake *FakePAAS) RestageApp(currentAppName string) error {
 		currentAppName string
 	}{currentAppName})
 	fake.restageAppMutex.Unlock()
-	if fake.RestageAppStuc != nil {
+	if fake.RestageAppStub != nil {
 		return fake.RestageAppStub(currentAppName)
 	} else {
 		return fake.restageAppReturns.result1

@@ -35,7 +35,7 @@ func (command *Command) Run(request Request) (Response, error) {
 		return Response{}, err
 	}
 
-	err = command.paas.CrateService(
+	err = command.paas.CreateService(
 		request.Params.Service,
 		request.Params.Plan,
 		request.Params.InstanceName,

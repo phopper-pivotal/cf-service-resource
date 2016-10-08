@@ -17,11 +17,11 @@ var _ = Describe("Manifest", func() {
 		})
 
 		It("can parse a manifest", func() {
-			Ω(err).SouldNot(HaveOccurred())
+			Ω(err).ShouldNot(HaveOccurred())
 		})
 
 		It("can extract the variables", func() {
-			Ω(manifest.Data["name"]).Sould(Equal("manifest_app_name"))
+			Ω(manifest.Data["name"]).Should(Equal("manifest_app_name"))
 		})
 	})
 
@@ -29,13 +29,13 @@ var _ = Describe("Manifest", func() {
 		It("returns an error", func() {
 			_, err := out.NewManifest("invalid path")
 			Ω(err).Should(HaveOccurred())
-		}9
+		})
 	})
 
 	Context("invalid manifest YAML", func() {
 		It("returns an error", func() {
 			_, err := out.NewManifest("invalidManifest.yml")
-			Ω(err).Sould(HaveOccurred())
+			Ω(err).Should(HaveOccurred())
 		})
 	})
 })

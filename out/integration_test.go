@@ -90,12 +90,12 @@ var _ = Describe("Out", func() {
 				GinkgoWriter,
 				GinkgoWriter,
 			)
-			Ω(err).SouldNot(HaveOccurred())
+			Ω(err).ShouldNot(HaveOccurred())
 
-			Eventually(session).Sould(gexec.Exit(1))
+			Eventually(session).Should(gexec.Exit(1))
 
 			errMsg := fmt.Sprintf("error invalid manifest file: name required")
-			Ω(session.Err).Should(gbytest.Say(errMsg))
+			Ω(session.Err).Should(gbytes.Say(errMsg))
 		})
 	})
 
@@ -106,29 +106,29 @@ var _ = Describe("Out", func() {
 			var err error
 
 			tmpFileManifest, err = ioutil.TempFile(tmpDir, "manifest-some-glob.yml_")
-			Ω(err).SouldNot(HaveOccurred())
+			Ω(err).ShouldNot(HaveOccurred())
 			_, err = tmpFileManifest.WriteString("name: foo-app\n")
-			Ω(err).SouldNot(HaveOccurred())
+			Ω(err).ShouldNot(HaveOccurred())
 
 			request.Params.ManifestPath = "manifest-*.yml_*"
 		})
 
-		Context("when one file matches", funct() {
+		Context("when one file matches", func() {
 			It("create/bind service and restage an application to Cloud Foundry", func() {
 				session, err := gexec.Start(
 					cmd,
 					GinkgoWriter,
 					GinkgoWriter,
 				)
-				Ω(err).SouldNot(HaveOccurred())
+				Ω(err).ShouldNot(HaveOccurred())
 
 				Eventually(session).Should(gexec.Exit(0))
 
 				var response out.Response
 				err = json.Unmarshal(session.Out.Contents(), &response)
-				Ω(err).SouldNot(HaveOccurred())
+				Ω(err).ShouldNot(HaveOccurred())
 
-				Ω(response.Version.Timestamp).Sould(BeTemporally("~", time.Now(), time.Second))
+				Ω(response.Version.Timestamp).Should(BeTemporally("~", time.Now(), time.Second))
 
 				// shim outputs arguments
 				Ω(session.Err).Should(gbytes.Say("cf api https://api.run.pivotal.io --skip-ssl-validation"))
@@ -139,7 +139,7 @@ var _ = Describe("Out", func() {
 				Ω(session.Err).Should(gbytes.Say("cf restage foo-app"))
 
 				// color should be always
-				Ω(session.Err9.Should(gbytes.Say("CF_COLOR=true"))
+				Ω(session.Err).Should(gbytes.Say("CF_COLOR=true"))
 			})
 		})
 
@@ -147,7 +147,7 @@ var _ = Describe("Out", func() {
 			BeforeEach(func() {
 				var err error
 				err = tmpFileManifest.Truncate(0)
-				Ω(err).SouldNot(HaveOccurred())
+				Ω(err).ShouldNot(HaveOccurred())
 			})
 			It("returns an error", func() {
 				session, err := gexec.Start(
@@ -178,7 +178,7 @@ var _ = Describe("Out", func() {
 				Ω(err).ShouldNot(HaveOccurred())
 
 				Eventually(session).Should(gexec.Exit(1))
-				errMsg := fmt.Sprintf("error invalid manifest path: found 0 files instead of 1 at path: %s, filepath.Join(tmpDir, `nope-\*`))
+				errMsg := fmt.Sprintf("error invalid manifest path: found 0 files instead of 1 at path: %s", filepath.Join(tmpDir, `nope-\*`))
 				Ω(session.Err).Should(gbytes.Say(errMsg))
 			})
 		})
@@ -217,7 +217,7 @@ var _ = Describe("Out", func() {
 			)
 			Ω(err).ShouldNot(HaveOccurred())
 
-			Eventually(session).should(gexec.Exit(0))
+			Eventually(session).Should(gexec.Exit(0))
 
 			var response out.Response
 			err = json.Unmarshal(session.Out.Contents(), &response)
@@ -321,7 +321,7 @@ var _ = Describe("Out", func() {
 
                 Context("manifest and current_app_name is empty", func() {
                         BeforeEach(func() {
-                                request.Params.Manifest = ""
+                                request.Params.ManifestPath = ""
 				request.Params.CurrentAppName = ""
                         })
 
