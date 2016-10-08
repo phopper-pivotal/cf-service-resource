@@ -6,12 +6,12 @@ image_resource:
   source: {repository: concourse/static-golang}
 
 inputs:
-- name: cf-sb-resource
-  path: gopath/src/github.com/idahobean/cf-sb-resource
+- name: cf-service-resource
+  path: gopath/src/github.com/idahobean/cf-service-resource
 - name: cf-cli
 
 outputs:
 - name: built-resource
 
 run:
-  path: gopath/src/github.com/idahobean/cf-sb-resource/scripts/ci
+  path: gopath/src/github.com/idahobean/cf-service-resource/scripts/ci

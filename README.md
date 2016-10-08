@@ -1,6 +1,6 @@
-# [WIP] Cloud Foundry Service Broker Resource
+# [WIP] Cloud Foundry Service Resource
 
-An output only resource that will create/bind to a
+An output only resource that will create/bind service to a
 Cloud Foundry Application.  
 based on  
 * [concourse/cf-resource](https://github.com/concourse/cf-resource)  
@@ -39,16 +39,16 @@ When both are listed, `manifest` is used.
 ```yaml
 ---
 resource_types:
-  - name: cf-sb-resource
+  - name: cf-service-resource
     type: docker-image
     source:
-      repository: idahobean/cf-sb-resource
+      repository: idahobean/cf-service-resource
 
 resources:
   - name: resource-web-app
     type: git
     source:
-      uri: https://github.com/idahobean/cf-service-bind-test.git
+      uri: https://github.com/idahobean/cf-service-resource-test.git
 
   - name: foobar-cf
     type: cf
@@ -61,7 +61,7 @@ resources:
       skip_cert_check: false
 
   - name: foobar-cf-sb
-    type: cf-sb-resource
+    type: cf-service-resource
     source:
       api: https://api.foo.bar.cfapps.io
       username: USERNAME

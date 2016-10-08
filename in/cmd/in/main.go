@@ -6,8 +6,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/idahobean/cf-sb-resource"
-	"github.com/idahobean/cf-sb-resource/in"
+	"github.com/idahobean/cf-service-resource"
+	"github.com/idahobean/cf-service-resource/in"
 )
 
 func main() {

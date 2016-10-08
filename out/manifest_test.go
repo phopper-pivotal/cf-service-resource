@@ -1,7 +1,7 @@
 package out_test
 
 import (
-	"github.com/idahobean/cf-sb-resource/out"
+	"github.com/idahobean/cf-service-resource/out"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"

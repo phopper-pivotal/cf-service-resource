@@ -6,7 +6,7 @@ import (
 	"os"
 	"errors"
 
-	"github.com/idahobean/cf-sb-resource/out"
+	"github.com/idahobean/cf-service-resource/out"
 )
 
 func main() {

@@ -2,7 +2,7 @@
 package fakes
 
 import (
-	"github.com/idahobean/cf-sb-resource/out"
+	"github.com/idahobean/cf-service-resource/out"
 	"sync"
 )
 

@@ -17,8 +17,8 @@ import (
 	"github.com/onsi/gomega/gbytes"
 	"github.com/onsi/gomega/gexec"
 
-	"github.com/idahobean/cf-sb-resource"
-	"github.com/idahobean/cf-sb-resource/out"
+	"github.com/idahobean/cf-service-resource"
+	"github.com/idahobean/cf-service-resource/out"
 )
 
 var _ = Describe("Out", func() {

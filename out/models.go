@@ -1,6 +1,6 @@
 package out
 
-import "github.com/idahobean/cf-sb-resource"
+import "github.com/idahobean/cf-service-resource"
 
 type Request struct {
 	Source resource.Source `json:"source"`

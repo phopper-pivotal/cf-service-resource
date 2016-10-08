@@ -1,34 +1,34 @@
 jobs:
-- name: build-cf-sb-resource-image
+- name: build-cf-service-resource-image
   public: false
   plan:
   - aggregate:
     - get: buildroot-base-image
       params: {save: true}
-    - get: cf-sb-resource
+    - get: cf-service-resource
       trigger: true
     - get: cf-cli
   - task: resource-unit
-    file: cf-sb-resource/build.yml
-  - put: cf-sb-resource-image
+    file: cf-service-resource/build.yml
+  - put: cf-service-resource-image
     params:
       load_base: buildroot-base-image
       build: built-resource
 
 resources:
-- name: cf-sb-resource
+- name: cf-service-resource
   type: git
   source:
-    uri: https://github.com/idahobean/cf-sb-resource.git
+    uri: https://github.com/idahobean/cf-service-resource.git
     branch: master
 
-- name: cf-sb-resource-image
+- name: cf-service-resource-image
   type: docker-image
   source:
     username: {{docker-username}}
     email: {{docker-email}}
     password: {{docker-password}}
-    repository: idahobean/cf-sb-resource
+    repository: idahobean/cf-service-resource
 
 - name: cf-cli
   type: s3
