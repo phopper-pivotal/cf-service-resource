@@ -35,12 +35,25 @@ func (command *Command) Run(request Request) (Response, error) {
 		return Response{}, err
 	}
 
-	err = command.paas.PushApp(
-		request.Params.Repository,
+	err = command.paas.CrateService(
+		request.Params.Service,
+		request.Params.Plan,
+		request.Params.InstanceName,
+	)
+	if err != nil {
+		return Response{}, err
+	}
+
+	err = command.paas.BindService(
 		request.Params.CurrentAppName,
-		request.Params.Memory,
-		request.Params.Disk,
-		request.Params.HealthCheck,
+		request.Params.InstanceName,
+	)
+	if err != nil {
+		return Response{}, err
+	}
+
+	err = command.paas.RestageApp(
+		request.Params.CurrentAppName,
 	)
 	if err != nil {
 		return Response{}, err

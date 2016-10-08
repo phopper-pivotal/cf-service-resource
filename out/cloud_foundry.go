@@ -8,7 +8,9 @@ import (
 type PAAS interface {
 	Login(api string, username string, password string, insecure bool) error
 	Target(organization string, space string) error
-	PushApp(repository string, currentAppName string, memory string, disk string, healthCheck string) error
+	CreateService(service string, plan string, instanceName string) error
+	BindService(currentAppName string, instanceName string) error
+	RestageApp(currentAppName string) error
 }
 
 type CloudFoundry struct{}
@@ -35,20 +37,24 @@ func (cf *CloudFoundry) Target(organization string, space string) error {
 	return cf.cf("target", "-o", organization, "-s", space).Run()
 }
 
-func (cf *CloudFoundry) PushApp(repository string, currentAppName string, memory string, disk string, healthCheck string) error {
+func (cf *CloudFoundry) CreateService(service string, plan string, instanceName string) error {
 	args := []string{}
-	options := []string{}
+	args = append(args, "create-service", service, plan, instanceName)
 
-	if memory != "" {
-		options = append(options, "-m", memory)
-	}
-	if disk != "" {
-		options = append(options, "-k", disk)
-	}
-	options = append(options, "-u", healthCheck)
+	return cf.cf(args...).Run()
+}
 
-	args = append(args, "push", currentAppName, "-o", repository)
-	args = append(args, options...)
+func (cf *CloudFoundry) BindService(currentAppName string, instanceName string) error {
+	args := []string{}
+	args = append(args, "bind-service", currentAppName, instanceName)
+
+	return cf.cf(args...).Run()
+}
+
+func (cf *CloudFoundry) RestageApp(currentAppName string) error {
+	args := []string{}
+	args = append(args, "restage", currentAppName)
+
 	return cf.cf(args...).Run()
 }
 

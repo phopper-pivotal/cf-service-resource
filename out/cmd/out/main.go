@@ -23,17 +23,47 @@ func main() {
 		fatal("reading request from stdin", err)
 	}
 
-	if request.Params.Repository == "" {
-		err := errors.New("repository")
-		fatal("parameter required", err)
+	var err error
+	if request.Params.Service == "" {
+		err = errors.New("service")
 	}
-	if request.Params.CurrentAppName == "" {
-		err := errors.New("current_app_name")
+	if request.Params.Plan == "" {
+		err = errors.New("service")
+	}
+	if request.Params.InstanceName == "" {
+		err = errors.New("instance_name")
+	}
+	if request.Params.ManifestPath == "" && request.Params.CurrentAppName == "" {
+		err = errors.New("either manifest/current_app_name")
+	}
+	if err != nil {
 		fatal("parameter required", err)
 	}
 
-	if request.Params.HealthCheck == "" {
-		request.Params.HealthCheck = "port"
+	// read current app name from manifest
+	if request.Params.ManifestPath != "" {
+		// make it an absolute path
+		request.Params.ManifestPath = filepath.Join(os.Args[1], request.Params.ManifestPath)
+
+		manifestFiles, err := filepath.Glob(request.Params.ManifestPath)
+		if err != nil {
+			fatal("searching for manifest files", err)
+		}
+
+		if len(manifestFiles) != 1 {
+			fatal("invalid manifest path", fmt.Errorf("found %d files instead of 1 at path: %s", len(manifestFiles), request.Params.ManifestPath))
+		}
+
+		manifest, err := out.NewManifest(manifestFiles[0])
+		if err != nil {
+			fatal("failed to load manifest file", err)
+		}
+
+		if manifest.Data["name"] == nil {
+			err := errors.New("name required")
+			fatal("invalid manifest file", err)
+		}
+		request.Params.CurrentAppName = manifest.Data["name"].(string)
 	}
 
 	response, err := command.Run(request)

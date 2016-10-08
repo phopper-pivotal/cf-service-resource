@@ -29,7 +29,7 @@ based on
 * `service`: *Required.* Service name.
 * `plan`: *Required.* Plan name of the service. 
 * `instance_name`: *Required.* Service instance name.
-* `manifest`: *(Either) Required.* Path to a application manifest file.
+* `manifest`: *(Either) Required.* Path to an application manifest file.
 * `current_app_name`: *(Either) Required.* The name of the application to bind service.  
 When both are listed, `manifest` is used.
 * `delete`: *Optional.* Default `false`. (not yet implemented)

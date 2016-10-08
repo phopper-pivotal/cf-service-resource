@@ -8,11 +8,11 @@ type Request struct {
 }
 
 type Params struct {
-	Repository           string            `json:"repository"`
-	CurrentAppName       string            `json:"current_app_name"`
-	Memory               string            `json:"memory"`
-	Disk                 string            `json:"disk"`
-	HealthCheck          string            `json:"health_check"`
+	Service          string    `json:"service"`
+	Plan             string    `json:"plan"`
+	InstanceName     string    `json:"instance_name"`
+	ManifestPath     string    `json:"manifest"`
+	CurrentAppName   string    `json:"current_app_name"`
 }
 
 type Response struct {
