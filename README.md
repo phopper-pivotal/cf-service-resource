@@ -1,4 +1,4 @@
-# [WIP] Cloud Foundry Service Resource
+# Cloud Foundry Service Resource
 
 An output only resource that will create/bind service to a
 Cloud Foundry Application.  
@@ -83,8 +83,9 @@ jobs:
       manifest: build-output/manifest.yml
     on_success:
       put: foobar-cf-service
-      manifest: build-output/manifest.yml
-      service: p-mysql
-      plan: 512mb  
+      params:
+        manifest: build-output/manifest.yml
+        service: p-mysql
+        plan: 512mb  
 
 ```
