@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"path/filepath"
 	"errors"
 
 	"github.com/idahobean/cf-service-resource/out"
