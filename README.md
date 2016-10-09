@@ -87,6 +87,6 @@ jobs:
         manifest: build-output/manifest.yml
         service: p-mysql
         plan: 512mb
-	instance_name: mysql-test
+        instance_name: mysql-test
 
 ```
