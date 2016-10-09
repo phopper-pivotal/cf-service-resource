@@ -29,7 +29,7 @@ func main() {
 		err = errors.New("service")
 	}
 	if request.Params.Plan == "" {
-		err = errors.New("service")
+		err = errors.New("plan")
 	}
 	if request.Params.InstanceName == "" {
 		err = errors.New("instance_name")

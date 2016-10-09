@@ -90,7 +90,7 @@ var _ = Describe("Out Command", func() {
 			currentAppName, instanceName := cloudFoundry.BindServiceArgsForCall(0)
 
 			Ω(currentAppName).Should(Equal("foobar"))
-			Ω(instanceName).Should(Equal("myql-test"))
+			Ω(instanceName).Should(Equal("mysql-test"))
 
 			By("restage app")
 			Ω(cloudFoundry.RestageAppCallCount()).Should(Equal(1))

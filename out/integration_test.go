@@ -34,6 +34,12 @@ var _ = Describe("Out", func() {
 		tmpDir, err = ioutil.TempDir("", "cf_resource_out")
 		Ω(err).ShouldNot(HaveOccurred())
 
+		err = os.Mkdir(filepath.Join(tmpDir, "project"), 0755)
+		Ω(err).ShouldNot(HaveOccurred())
+
+		err = ioutil.WriteFile(filepath.Join(tmpDir, "project", "manifest.yml"), []byte{}, 0555)
+		Ω(err).ShouldNot(HaveOccurred())
+
 		request = out.Request{
 			Source: resource.Source{
 				API:           "https://api.run.pivotal.io",
@@ -198,7 +204,7 @@ var _ = Describe("Out", func() {
 				Ω(err).ShouldNot(HaveOccurred())
 
 				Eventually(session).Should(gexec.Exit(1))
-				errMsg := fmt.Sprintf("error incalid manifest path: found 2 files instead of 1 at path: %s", filepath.Join(tmpDir, `manifest-\*.yml_\*`))
+				errMsg := fmt.Sprintf("error invalid manifest path: found 2 files instead of 1 at path: %s", filepath.Join(tmpDir, `manifest-\*.yml_\*`))
 				Ω(session.Err).Should(gbytes.Say(errMsg))
 			})
 		})
@@ -278,26 +284,6 @@ var _ = Describe("Out", func() {
 				Ω(session.Err).Should(gbytes.Say(errMsg))
 			})
 		})
-
-                Context("plan is empty", func() {
-                        BeforeEach(func() {
-                                request.Params.Plan = ""
-                        })
-
-                        It("return an error", func() {
-                                session, err := gexec.Start(
-                                        cmd,
-                                        GinkgoWriter,
-                                        GinkgoWriter,
-                                )
-                                Ω(err).ShouldNot(HaveOccurred())
-
-                                Eventually(session).Should(gexec.Exit(1))
-
-                                errMsg := fmt.Sprintf("error parameter required: plan")
-                                Ω(session.Err).Should(gbytes.Say(errMsg))
-                        })
-                })
 
                 Context("instance_name is empty", func() {
                         BeforeEach(func() {
