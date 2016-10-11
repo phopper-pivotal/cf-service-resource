@@ -21,7 +21,7 @@ var _ = Describe("Manifest", func() {
 		})
 
 		It("can extract the variables", func() {
-			Ω(manifest.Data["name"]).Should(Equal("manifest_app_name"))
+			Ω(manifest.Data["applications"].([]interface{})[0].(map[interface{}]interface{})["name"]).Should(Equal("manifest_app_name"))
 		})
 	})
 

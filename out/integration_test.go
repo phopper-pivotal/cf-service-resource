@@ -100,7 +100,7 @@ var _ = Describe("Out", func() {
 
 			Eventually(session).Should(gexec.Exit(1))
 
-			errMsg := fmt.Sprintf("error invalid manifest file: name required")
+			errMsg := fmt.Sprintf("error invalid manifest file: applications required")
 			Ω(session.Err).Should(gbytes.Say(errMsg))
 		})
 	})
@@ -113,7 +113,7 @@ var _ = Describe("Out", func() {
 
 			tmpFileManifest, err = ioutil.TempFile(tmpDir, "manifest-some-glob.yml_")
 			Ω(err).ShouldNot(HaveOccurred())
-			_, err = tmpFileManifest.WriteString("name: foo-app\n")
+			_, err = tmpFileManifest.WriteString("applications:\n - name: foo-app\n")
 			Ω(err).ShouldNot(HaveOccurred())
 
 			request.Params.ManifestPath = "manifest-*.yml_*"
@@ -152,7 +152,11 @@ var _ = Describe("Out", func() {
 		Context("when one file matches but name is missing", func() {
 			BeforeEach(func() {
 				var err error
-				err = tmpFileManifest.Truncate(0)
+				err = os.Remove(tmpFileManifest.Name())
+				Ω(err).ShouldNot(HaveOccurred())
+				tmpFileManifest, err = ioutil.TempFile(tmpDir, "manifest-some-glob.yml_")
+				Ω(err).ShouldNot(HaveOccurred())
+				_, err = tmpFileManifest.WriteString("applications:\n - env: foo=bar\n")
 				Ω(err).ShouldNot(HaveOccurred())
 			})
 			It("returns an error", func() {

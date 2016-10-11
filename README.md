@@ -90,3 +90,11 @@ jobs:
         instance_name: mysql-test
 
 ```
+
+## Manifest Example
+
+```yaml
+---
+applications:
+- name: foobar-app
+```

@@ -60,11 +60,22 @@ func main() {
 			fatal("failed to load manifest file", err)
 		}
 
-		if manifest.Data["name"] == nil {
+		if !manifest.Data["applications"] {
+			err := errors.New("applications required")
+			fatal("invalid manifest file", err)
+		}
+
+		application, hasValue := manifest.Data["applications"].([]interface{})[0].(map[interface{}]interface{})
+		if !hasValue {
+			err := errors.New("structure")
+			fatal("invalid manifest file", err)
+		}
+		if !application["name"] {
 			err := errors.New("name required")
 			fatal("invalid manifest file", err)
 		}
-		request.Params.CurrentAppName = manifest.Data["name"].(string)
+
+		request.Params.CurrentAppName = application["name"].(string)
 	}
 
 	response, err := command.Run(request)
