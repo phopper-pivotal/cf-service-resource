@@ -60,7 +60,7 @@ func main() {
 			fatal("failed to load manifest file", err)
 		}
 
-		if !manifest.Data["applications"] {
+		if manifest.Data["applications"] == nil {
 			err := errors.New("applications required")
 			fatal("invalid manifest file", err)
 		}
@@ -70,7 +70,7 @@ func main() {
 			err := errors.New("structure")
 			fatal("invalid manifest file", err)
 		}
-		if !application["name"] {
+		if application["name"] == nil {
 			err := errors.New("name required")
 			fatal("invalid manifest file", err)
 		}
