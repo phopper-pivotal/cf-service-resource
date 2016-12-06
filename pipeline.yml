@@ -10,10 +10,10 @@ jobs:
     - get: cf-cli
   - task: resource-unit
     file: cf-service-resource/build.yml
-  - put: cf-service-resource-image
-    params:
-      load_base: buildroot-base-image
-      build: built-resource
+##  - put: cf-service-resource-image
+##    params:
+##      load_base: buildroot-base-image
+##      build: built-resource
 
 resources:
 - name: cf-service-resource
@@ -22,19 +22,19 @@ resources:
     uri: https://github.com/idahobean/cf-service-resource.git
     branch: master
 
-- name: cf-service-resource-image
-  type: docker-image
-  source:
-    username: {{docker-username}}
-    email: {{docker-email}}
-    password: {{docker-password}}
-    repository: idahobean/cf-service-resource
+##- name: cf-service-resource-image
+##  type: docker-image
+##  source:
+##    username: {{docker-username}}
+##    email: {{docker-email}}
+##    password: {{docker-password}}
+##    repository: idahobean/cf-service-resource
 
 - name: cf-cli
-  type: s3
+  type: github-release
   source:
-    bucket: go-cli
-    regexp: releases/v([\d\.]+)/cf-cli_.*_linux_x86-64.tgz
+    user: cloudfoundry
+    repository: cli
 
 - name: buildroot-base-image
   type: docker-image
