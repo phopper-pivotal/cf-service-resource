@@ -7,34 +7,36 @@ jobs:
       params: {save: true}
     - get: cf-service-resource
       trigger: true
-    - get: cf-cli
+    - get: cf-cli-release
+      params: {include_source_tarball: true}
   - task: resource-unit
     file: cf-service-resource/build.yml
-##  - put: cf-service-resource-image
-##    params:
-##      load_base: buildroot-base-image
-##      build: built-resource
+  - put: cf-service-resource-image
+    params:
+      load_base: buildroot-base-image
+      build: built-resource
 
 resources:
 - name: cf-service-resource
   type: git
   source:
     uri: https://github.com/idahobean/cf-service-resource.git
-    branch: change-cli-resource-typ
+    branch: change-cli-resource-type
 
-##- name: cf-service-resource-image
-##  type: docker-image
-##  source:
-##    username: {{docker-username}}
-##    email: {{docker-email}}
-##    password: {{docker-password}}
-##    repository: idahobean/cf-service-resource
-
-- name: cf-cli
+- name: cf-cli-release
   type: github-release
   source:
     user: cloudfoundry
     repository: cli
+
+- name: cf-service-resource-image
+  type: docker-image
+  source:
+    username: {{docker-username}}
+    email: {{docker-email}}
+    password: {{docker-password}}
+    repository: idahobean/cf-service-resource
+    tag: 0.1
 
 - name: buildroot-base-image
   type: docker-image
