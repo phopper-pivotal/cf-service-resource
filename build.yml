@@ -8,7 +8,6 @@ image_resource:
 inputs:
 - name: cf-service-resource
   path: gopath/src/github.com/idahobean/cf-service-resource
-- name: cf-cli
 
 outputs:
 - name: built-resource

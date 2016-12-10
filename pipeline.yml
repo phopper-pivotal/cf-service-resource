@@ -7,7 +7,6 @@ jobs:
       params: {save: true}
     - get: cf-service-resource
       trigger: true
-    - get: cf-cli
   - task: resource-unit
     file: cf-service-resource/build.yml
   - put: cf-service-resource-image
@@ -20,7 +19,7 @@ resources:
   type: git
   source:
     uri: https://github.com/idahobean/cf-service-resource.git
-    branch: master
+    branch: change-cli-resource-type
 
 - name: cf-service-resource-image
   type: docker-image
@@ -29,15 +28,10 @@ resources:
     email: {{docker-email}}
     password: {{docker-password}}
     repository: idahobean/cf-service-resource
-
-- name: cf-cli
-  type: s3
-  source:
-    bucket: go-cli
-    regexp: releases/v([\d\.]+)/cf-cli_.*_linux_x86-64.tgz
+    tag: 0.1
 
 - name: buildroot-base-image
   type: docker-image
   source:
     repository: concourse/buildroot
-    tag: base
+    tag: curl
