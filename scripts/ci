@@ -8,14 +8,6 @@ export PATH=$GOPATH/bin:$PATH
 
 BUILD_DIR=$PWD/built-resource
 
-# test
-(
-    set -e
-    cd cf-cli-release/
-    tar -zxvf source.tar.gz
-    find .
-)
-
 # run tests
 (
     set -e
@@ -30,7 +22,7 @@ BUILD_DIR=$PWD/built-resource
     CGO_ENABLED=1 ginkgo -race -r -p "$@"
 )
 
-# build & download binaries
+# build binaries
 (
     set -e
 
