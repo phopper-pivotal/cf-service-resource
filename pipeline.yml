@@ -19,7 +19,7 @@ resources:
   type: git
   source:
     uri: https://github.com/idahobean/cf-service-resource.git
-    branch: change-cli-resource-type
+    branch: master
 
 - name: cf-service-resource-image
   type: docker-image
