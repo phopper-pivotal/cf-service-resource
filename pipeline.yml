@@ -28,7 +28,6 @@ resources:
     email: {{docker-email}}
     password: {{docker-password}}
     repository: idahobean/cf-service-resource
-    tag: 0.1
 
 - name: buildroot-base-image
   type: docker-image
