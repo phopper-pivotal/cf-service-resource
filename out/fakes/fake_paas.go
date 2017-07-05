@@ -46,6 +46,7 @@ type FakePAAS struct {
 	bindServiceReturns struct {
 		result1 error
 	}
+        UpdateServiceStub func(service string, p
 	RestageAppStub  func(currentAppName string) error
 	restageAppMutex sync.RWMutex
 	restageAppArgsForCall []struct {
@@ -124,16 +125,17 @@ func (fake *FakePAAS) TargetReturns(result1 error) {
 	}{result1}
 }
 
-func (fake *FakePAAS) CreateService(service string, plan string, instanceName string) error {
+func (fake *FakePAAS) CreateService(service string, plan string, instanceName string, parametersAsJson string) error {
 	fake.createServiceMutex.Lock()
 	fake.createServiceArgsForCall = append(fake.createServiceArgsForCall, struct {
-		service      string
-		plan         string
-		instanceName string
-	}{service, plan, instanceName})
+		service          string
+		plan             string
+		instanceName     string
+		parametersAsJson string
+	}{service, plan, instanceName, parametersAsJson})
 	fake.createServiceMutex.Unlock()
 	if fake.CreateServiceStub != nil {
-		return fake.CreateServiceStub(service, plan, instanceName)
+		return fake.CreateServiceStub(service, plan, instanceName, parametersAsJson)
 	} else {
 		return fake.createServiceReturns.result1
 	}
@@ -145,15 +147,82 @@ func (fake *FakePAAS) CreateServiceCallCount() int {
 	return len(fake.createServiceArgsForCall)
 }
 
-func (fake *FakePAAS) CreateServiceArgsForCall(i int) (string, string, string) {
+func (fake *FakePAAS) CreateServiceArgsForCall(i int) (string, string, string, string) {
 	fake.createServiceMutex.RLock()
 	defer fake.createServiceMutex.RUnlock()
-	return fake.createServiceArgsForCall[i].service, fake.createServiceArgsForCall[i].plan, fake.createServiceArgsForCall[i].instanceName
+	return fake.createServiceArgsForCall[i].service, fake.createServiceArgsForCall[i].plan, fake.createServiceArgsForCall[i].instanceName, fake.createServiceArgsForCall[i].parametersAsJson
 }
 
 func (fake *FakePAAS) CreateServiceReturns(result1 error) {
 	fake.CreateServiceStub = nil
 	fake.createServiceReturns = struct {
+		result1 error
+	}{result1}
+}
+
+func (fake *FakePAAS) UpdateService(service string, plan string, instanceName string, parametersAsJson string) error {
+	fake.updateServiceMutex.Lock()
+	fake.updateServiceArgsForCall = append(fake.updateServiceArgsForCall, struct {
+		service          string
+		plan             string
+		instanceName     string
+		parametersAsJson string
+	}{service, plan, instanceName, parametersAsJson})
+	fake.updateServiceMutex.Unlock()
+	if fake.UpdateServiceStub != nil {
+		return fake.UpdateServiceStub(service, plan, instanceName, parametersAsJson)
+	} else {
+		return fake.updateServiceReturns.result1
+	}
+}
+
+func (fake *FakePAAS) UpdateServiceCallCount() int {
+	fake.updateServiceMutex.RLock()
+	defer fake.updateServiceMutex.RUnlock()
+	return len(fake.updateServiceArgsForCall)
+}
+
+func (fake *FakePAAS) UpdateServiceArgsForCall(i int) (string, string, string, string) {
+	fake.updateServiceMutex.RLock()
+	defer fake.updateServiceMutex.RUnlock()
+	return fake.updateServiceArgsForCall[i].service, fake.updateServiceArgsForCall[i].plan, fake.updateServiceArgsForCall[i].instanceName, fake.updateServiceArgsForCall[i].parametersAsJson
+}
+
+func (fake *FakePAAS) UpdateServiceReturns(result1 error) {
+	fake.UpdateServiceStub = nil
+	fake.updateServiceReturns = struct {
+		result1 error
+	}{result1}
+}
+
+func (fake *FakePAAS) DeleteService(service string) error {
+	fake.deleteServiceMutex.Lock()
+	fake.deleteServiceArgsForCall = append(fake.deleteServiceArgsForCall, struct {
+		service          string
+	}{service})
+	fake.deleteServiceMutex.Unlock()
+	if fake.DeleteServiceStub != nil {
+		return fake.DeleteServiceStub(service)
+	} else {
+		return fake.DeleteServiceReturns.result1
+	}
+}
+
+func (fake *FakePAAS) DeleteServiceCallCount() int {
+	fake.deleteServiceMutex.RLock()
+	defer fake.deleteServiceMutex.RUnlock()
+	return len(fake.deleteServiceArgsForCall)
+}
+
+func (fake *FakePAAS) DeleteServiceArgsForCall(i int) (string) {
+	fake.deleteServiceMutex.RLock()
+	defer fake.deleteServiceMutex.RUnlock()
+	return fake.deleteServiceArgsForCall[i].service
+}
+
+func (fake *FakePAAS) DeleteServiceReturns(result1 error) {
+	fake.DeleteServiceStub = nil
+	fake.DeleteServiceReturns = struct {
 		result1 error
 	}{result1}
 }

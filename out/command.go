@@ -39,6 +39,24 @@ func (command *Command) Run(request Request) (Response, error) {
 		request.Params.Service,
 		request.Params.Plan,
 		request.Params.InstanceName,
+		request.Params.ParametersAsJson
+	)
+	if err != nil {
+		return Response{}, err
+	}
+
+	err = command.paas.UpdateService(
+		request.Params.Service,
+		request.Params.Plan,
+		request.Params.InstanceName,
+		request.Params.ParametersAsJson
+	)
+	if err != nil {
+		return Response{}, err
+	}
+
+	err = command.paas.DeleteService(
+		request.Params.Service
 	)
 	if err != nil {
 		return Response{}, err
