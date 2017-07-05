@@ -21,18 +21,21 @@ based on
 
 ### `out`: Create and Bind Service to a Cloud Foundry Application
 
-1. Create and Bind service to the Cloud Foundry deployed application.
+1. Create and Bind service to a deployed application.
+2. Update service instance by passing parametersAsJson
+3. Delete service instance
 2. Restage Application
 
 #### Parameters
 
 * `service`: *Required.* Service name.
-* `plan`: *Required.* Plan name of the service. 
+* `plan`: *Required.* Plan name of the service.
 * `instance_name`: *Required.* Service instance name.
 * `manifest`: *(Either) Required.* Path to an application manifest file.
 * `current_app_name`: *(Either) Required.* The name of the application to bind service.  
 When both are listed, `manifest` is used.
-* `delete`: *Optional.* Default `false`. (not yet implemented)
+* `update`: *Optional*
+* `delete`: *Optional*
 
 ## Pipeline example
 
