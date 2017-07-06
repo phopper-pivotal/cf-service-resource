@@ -15,18 +15,24 @@ type FakePAAS struct {
 		password string
 		insecure bool
 	}
+
 	loginReturns struct {
 		result1 error
 	}
+
+
 	TargetStub        func(organization string, space string) error
 	targetMutex       sync.RWMutex
 	targetArgsForCall []struct {
 		organization string
 		space        string
 	}
+
 	targetReturns struct {
 		result1 error
 	}
+
+
 	CreateServiceStub  func(service string, plan string, instanceName string) error
 	createServiceMutex sync.RWMutex
 	createServiceArgsForCall []struct {
@@ -34,24 +40,53 @@ type FakePAAS struct {
 		plan         string
 		instanceName string
 	}
+
 	createServiceReturns struct {
 		result1 error
 	}
+
+
 	BindServiceStub  func(currentAppName string, instanceName string) error
 	bindServiceMutex sync.RWMutex
 	bindServiceArgsForCall []struct {
 		currentAppName string
 		instanceName   string
 	}
+
 	bindServiceReturns struct {
 		result1 error
 	}
-        UpdateServiceStub func(service string, p
+
+
+	UpdateServiceStub func(service string, plan string, parametersAsJson string) error
+  updateServiceMutex sync.RWMutex
+	updateServiceArgsForCall []struct {
+		service          string
+		plan             string
+		parametersAsJson string
+	}
+
+	updateServiceReturns struct {
+		result1 error
+	}
+
+	DeleteServiceStuf func(service string) error
+	deleteServiceMutex sync.RWMutex
+	deleteServiceArgsForCall []struct {
+		service string
+	}
+
+	DeleteServiceReturns struct {
+	  result1 error
+  }
+	
+
 	RestageAppStub  func(currentAppName string) error
 	restageAppMutex sync.RWMutex
 	restageAppArgsForCall []struct {
 		currentAppName string
 	}
+
 	restageAppReturns struct {
 		result1 error
 	}
