@@ -8,6 +8,7 @@ import (
 type PAAS interface {
 	Login(api string, username string, password string, insecure bool) error
 	Target(organization string, space string) error
+	Service(service string) error
 	CreateService(service string, plan string, instanceName string, parametersAsJson string) error
 	UpdateService(service string, plan string, parametersAsJson string) error
   DeleteService(service string)
@@ -39,25 +40,45 @@ func (cf *CloudFoundry) Target(organization string, space string) error {
 	return cf.cf("target", "-o", organization, "-s", space).Run()
 }
 
+func (cf *CloudFoundry) Service(service string) error {
+	err := cf.cf("service", service).Run()
+
+	if err != nil {
+		return err
+	}
+}
+
 func (cf *CloudFoundry) CreateService(service string, plan string, instanceName string, parametersAsJson string) error {
 	args := []string{}
-	args = append(args, "create-service", service, plan, instanceName, parametersAsJson)
+	args = append(args, "create-service", service, plan, instanceName
+
+	if parametersAsJson != "" {
+		args = append("-c", parametersAsJson)
+	}
 
 	return cf.cf(args...).Run()
 }
 
 func (cf *CloudFoundry) UpdateService(service string, plan string, parametersAsJson string) error {
-        args := []string{};
-        args = append(args, "update-service", service, plan, parametersAsJson)
+  args := []string{};
+  args = append(args, "update-service", service)
 
-        return cf.cf(args...).Run()
+  if plan != "" {
+     args = append("-p", plan)
+	}
+
+  if parametersAsJson != "" {
+     args = append("-c", parametersAsJson)
+	}
+
+  return cf.cf(args...).Run()
 }
 
 func (cf *CloudFoundry) DeleteService(service string) error {
-        args := []string{}
-        args = append(args, "delete-service", service)
+   args := []string{}
+   args = append(args, "delete-service", service)
 
-        return cf.cf(args...).Run()
+   return cf.cf(args...).Run()
 }
 
 func (cf *CloudFoundry) BindService(currentAppName string, instanceName string) error {
