@@ -7,9 +7,9 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
-	"github.com/idahobean/cf-service-resource"
-	"github.com/idahobean/cf-service-resource/out"
-	"github.com/idahobean/cf-service-resource/out/fakes"
+	"github.com/phopper-pivotal/cf-service-resource"
+	"github.com/phopper-pivotal/cf-service-resource/out"
+	"github.com/phopper-pivotal/cf-service-resource/out/fakes"
 )
 
 var _ = Describe("Out Command", func() {

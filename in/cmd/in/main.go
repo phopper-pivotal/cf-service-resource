@@ -6,8 +6,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/idahobean/cf-service-resource"
-	"github.com/idahobean/cf-service-resource/in"
+	"github.com/phopper-pivotal/cf-service-resource"
+	"github.com/phopper-pivotal/cf-service-resource/in"
 )
 
 func main() {

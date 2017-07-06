@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"errors"
 
-	"github.com/idahobean/cf-service-resource/out"
+	"github.com/phopper-pivotal/cf-service-resource/out"
 )
 
 func main() {

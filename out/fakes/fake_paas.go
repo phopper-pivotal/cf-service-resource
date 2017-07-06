@@ -2,7 +2,7 @@
 package fakes
 
 import (
-	"github.com/idahobean/cf-service-resource/out"
+	"github.com/phopper-pivotal/cf-service-resource/out"
 	"sync"
 )
 

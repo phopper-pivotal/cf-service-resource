@@ -4,7 +4,7 @@ An output only resource that will create/bind service to a
 Cloud Foundry Application.  
 based on  
 * [concourse/cf-resource](https://github.com/concourse/cf-resource)  
-* [idahobean/cf-docker-resource](https://github.com/idahobean/cf-docker-resource)
+* [phopper-pivotal/cf-docker-resource](https://github.com/phopper-pivotal/cf-docker-resource)
 
 ## Source Configuration
 
@@ -45,13 +45,13 @@ resource_types:
   - name: cf-service-resource
     type: docker-image
     source:
-      repository: idahobean/cf-service-resource
+      repository: phopper-pivotal/cf-service-resource
 
 resources:
   - name: resource-web-app
     type: git
     source:
-      uri: https://github.com/idahobean/cf-service-resource-test.git
+      uri: https://github.com/phopper-pivotal/cf-service-resource-test.git
 
   - name: foobar-cf
     type: cf
