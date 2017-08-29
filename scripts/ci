@@ -2,7 +2,6 @@
 
 set -eu
 
-export GOPATH=$PWD/gopath
 export PATH=$GOPATH/bin:$PATH
 
 BUILD_DIR=$PWD/built-resource
@@ -16,7 +15,8 @@ BUILD_DIR=$PWD/built-resource
     export GOPATH=${PWD}/Godeps/_workspace:$GOPATH
     export PATH=${PWD}/Godeps/_workspace/bin:$PATH
 
-    go install github.com/onsi/ginkgo/ginkgo
+    # let's make the assumption that ginkgo is already installed
+    # go install github.com/onsi/ginkgo/ginkgo
 
     CGO_ENABLED=1 ginkgo -race -r -p "$@"
 )

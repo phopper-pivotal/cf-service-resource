@@ -11,7 +11,7 @@ type PAAS interface {
 	Service(service string) error
 	CreateService(service string, plan string, instanceName string, parametersAsJson string) error
 	UpdateService(service string, plan string, parametersAsJson string) error
-  DeleteService(service string)
+  DeleteService(service string) error
 	BindService(currentAppName string, instanceName string) error
 	RestageApp(currentAppName string) error
 }
@@ -41,19 +41,15 @@ func (cf *CloudFoundry) Target(organization string, space string) error {
 }
 
 func (cf *CloudFoundry) Service(service string) error {
-	err := cf.cf("service", service).Run()
-
-	if err != nil {
-		return err
-	}
+  return cf.cf("service", service).Run()
 }
 
 func (cf *CloudFoundry) CreateService(service string, plan string, instanceName string, parametersAsJson string) error {
 	args := []string{}
-	args = append(args, "create-service", service, plan, instanceName
+	args = append(args, "create-service", service, plan, instanceName)
 
 	if parametersAsJson != "" {
-		args = append("-c", parametersAsJson)
+		args = append(args, "-c", parametersAsJson)
 	}
 
 	return cf.cf(args...).Run()
@@ -64,11 +60,11 @@ func (cf *CloudFoundry) UpdateService(service string, plan string, parametersAsJ
   args = append(args, "update-service", service)
 
   if plan != "" {
-     args = append("-p", plan)
+     args = append(args, "-p", plan)
 	}
 
   if parametersAsJson != "" {
-     args = append("-c", parametersAsJson)
+     args = append(args, "-c", parametersAsJson)
 	}
 
   return cf.cf(args...).Run()

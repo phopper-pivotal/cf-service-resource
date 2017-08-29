@@ -11,6 +11,7 @@ type Params struct {
 	Service          string    `json:"service"`
 	Plan             string    `json:"plan"`
 	InstanceName     string    `json:"instance_name"`
+	ParametersAsJson string    `json:"parameters_as_json"`
 	ManifestPath     string    `json:"manifest"`
 	CurrentAppName   string    `json:"current_app_name"`
 	SkipBinding			 bool			 `json:"skip_binding"`
